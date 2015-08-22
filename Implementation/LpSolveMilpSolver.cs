@@ -2,7 +2,7 @@
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
 
-namespace LpSolveMilpSolver.Implementation
+namespace LpSolveMilpManager.Implementation
 {
     public class LpSolveMilpSolver  : BaseMilpSolver
     {

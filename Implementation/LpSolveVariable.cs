@@ -1,6 +1,6 @@
 ﻿using MilpManager.Abstraction;
 
-namespace LpSolveMilpSolver.Implementation
+namespace LpSolveMilpManager.Implementation
 {
     public class LpSolveVariable : IVariable
     {
