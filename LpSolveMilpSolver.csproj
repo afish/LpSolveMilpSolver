@@ -7,7 +7,7 @@
     <ProjectGuid>{D2EB420E-4ED8-49DA-832A-87A2B092A7C9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LpSolveMilpSolver</RootNamespace>
+    <RootNamespace>LpSolveMilpManager</RootNamespace>
     <AssemblyName>LpSolveMilpSolver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MilpManager, Version=0.10.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MilpManager.0.10.3.0\lib\net45\MilpManager.dll</HintPath>
+    <Reference Include="MilpManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MilpManager.1.0.0.0\lib\net45\MilpManager.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

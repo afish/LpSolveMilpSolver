@@ -1,4 +1,4 @@
-# CplexMilpSolver
+# LpSolveMilpSolver
 Basic implementation of MilpManager using LpSolve.
 
 
