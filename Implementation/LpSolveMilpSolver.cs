@@ -55,7 +55,6 @@ namespace LpSolveMilpManager.Implementation
             var firstVariable = (first as LpSolveVariable);
             var secondVariable = (second as LpSolveVariable);
             newVariable.ConstantValue = firstVariable.ConstantValue + secondVariable.ConstantValue;
-            newVariable.Domain = domain;
             var row = GetRowArray();
             row[firstVariable.Id] = 1;
             row[secondVariable.Id] = 1;
@@ -70,10 +69,9 @@ namespace LpSolveMilpManager.Implementation
             var castedVariable = (variable as LpSolveVariable);
             var variableValue = castedVariable.ConstantValue;
             newVariable.ConstantValue = -variableValue;
-            newVariable.Domain = domain;
             var row = GetRowArray();
-            row[castedVariable.Id] = 1;
-            row[newVariable.Id] = 1;
+            row[castedVariable.Id] = -1;
+            row[newVariable.Id] = -1;
             AddRowConstraint(row);
             return newVariable;
         }
@@ -84,7 +82,6 @@ namespace LpSolveMilpManager.Implementation
             var castedVariable = (variable as LpSolveVariable);
             var constantValue = (constant as LpSolveVariable).ConstantValue;
             newVariable.ConstantValue = castedVariable.ConstantValue*constantValue;
-            newVariable.Domain = domain;
             var row = GetRowArray();
             row[castedVariable.Id] = constantValue;
             row[newVariable.Id] = -1;
@@ -109,8 +106,8 @@ namespace LpSolveMilpManager.Implementation
             newVariable.ConstantValue = castedVariable.ConstantValue / constantValue;
             newVariable.Domain = domain;
             var row = GetRowArray();
-            row[castedVariable.Id] = 1;
-            row[newVariable.Id] = -constantValue;
+            row[castedVariable.Id] = 1 / constantValue;
+            row[newVariable.Id] = -1;
             AddRowConstraint(row);
             return newVariable;
         }
@@ -149,7 +146,6 @@ namespace LpSolveMilpManager.Implementation
             var variable = AddNewVariable();
             variable.Domain = domain;
             variable.Name = name;
-            variable.ConstantValue = 1;
             if (!lpsolve.set_col_name(_lp, variable.Id, name))
             {
                 throw new InvalidOperationException();
