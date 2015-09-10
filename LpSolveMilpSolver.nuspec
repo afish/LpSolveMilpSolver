@@ -14,4 +14,7 @@
     <copyright>Copyright 2015</copyright>
     <tags>LpSolve MILP ILP MilpManager MilpSolver</tags>
   </metadata>
+  <dependencies>
+	<dependency id="MilpManager" version="1.1.1"/>
+  </dependencies>
 </package>
