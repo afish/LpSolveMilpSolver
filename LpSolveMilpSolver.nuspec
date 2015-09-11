@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
@@ -14,7 +14,7 @@
     <copyright>Copyright 2015</copyright>
     <tags>LpSolve MILP ILP MilpManager MilpSolver</tags>
   </metadata>
-  <dependencies>
-	<dependency id="MilpManager" version="1.1.1"/>
-  </dependencies>
+  <files>
+	<file src="output\lpsolve55.dll" target="output\lpsolve55.dll" />
+  </files>
 </package>
