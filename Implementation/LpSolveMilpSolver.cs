@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
 
@@ -194,7 +195,14 @@ namespace LpSolveMilpManager.Implementation
 
         public override void SaveModelToFile(string modelPath)
         {
-            lpsolve.write_freemps(_lp, modelPath);
+            if (Path.GetExtension(modelPath) == "lp")
+            {
+                lpsolve.write_lp(_lp, modelPath);
+            }
+            else
+            {
+                lpsolve.write_freemps(_lp, modelPath);
+            }
         }
 
         public override void LoadModelFromFile(string modelPath, string solverDataPath)
