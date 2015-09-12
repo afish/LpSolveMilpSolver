@@ -116,7 +116,7 @@ namespace LpSolveMilpManager.Implementation
             AddRowConstraint(row, lpsolve.lpsolve_constr_types.LE);
         }
 
-        protected override void InternalSetEqual(IVariable variable, IVariable bound)
+        public override void SetEqual(IVariable variable, IVariable bound)
         {
             var row = GetRowArray();
             row[VariableId(variable)] = 1;
