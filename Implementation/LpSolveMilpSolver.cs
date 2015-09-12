@@ -7,37 +7,40 @@ namespace LpSolveMilpManager.Implementation
 {
     public class LpSolveMilpSolver  : BaseMilpSolver
     {
-        public readonly IntPtr _lp;
-        public int rows = 0;
-        public int columns = 0;
+        public readonly IntPtr LpSolvePointer;
+        public int Rows;
+        public int Columns;
 
         private double[] GetEmptyArray(int count)
         {
-            return new double[count];
+            var array = new double[count];
+            for (int i = 0; i < count; ++i)
+            {
+                array[i] = 0;
+            }
+            return array;
         }
 
         private double[] GetColumnArray()
         {
-            return GetEmptyArray(rows + 1);
+            return GetEmptyArray(Rows + 1);
         }
 
         private double[] GetRowArray()
         {
-            return GetEmptyArray(columns + 1);
+            return GetEmptyArray(Columns + 1);
         }
-
-        private int tempId;
 
         private LpSolveVariable AddNewVariable()
         {
-            columns ++;
+            Columns ++;
             var variable = new LpSolveVariable
             {
-                Id = columns,
+                Id = Columns,
                 MilpManager = this
             };
 
-            if (!lpsolve.add_column(_lp, GetColumnArray()))
+            if (!lpsolve.add_column(LpSolvePointer, GetColumnArray()))
             {
                 throw new InvalidOperationException();
             }
@@ -45,70 +48,62 @@ namespace LpSolveMilpManager.Implementation
             return variable;
         }
 
-        public LpSolveMilpSolver(int integerWidth) : base(integerWidth)
+        private int VariableId(IVariable v)
         {
-            _lp = lpsolve.make_lp(0, 0);
+            return (v as LpSolveVariable).Id;
         }
-
-        public override IVariable SumVariables(IVariable first, IVariable second, Domain domain)
+        private void AddRowConstraint(double[] row, lpsolve.lpsolve_constr_types type = lpsolve.lpsolve_constr_types.EQ, double val = 0)
         {
-            var newVariable = CreateAnonymous(domain) as LpSolveVariable;
-            var firstVariable = (first as LpSolveVariable);
-            var secondVariable = (second as LpSolveVariable);
-            newVariable.ConstantValue = firstVariable.ConstantValue + secondVariable.ConstantValue;
-            var row = GetRowArray();
-            row[firstVariable.Id] = 1;
-            row[secondVariable.Id] = 1;
-            row[newVariable.Id] = -1;
-            AddRowConstraint(row);
-            return newVariable;
-        }
-
-        public override IVariable NegateVariable(IVariable variable, Domain domain)
-        {
-            var newVariable = CreateAnonymous(domain) as LpSolveVariable;
-            var castedVariable = (variable as LpSolveVariable);
-            var variableValue = castedVariable.ConstantValue;
-            newVariable.ConstantValue = -variableValue;
-            var row = GetRowArray();
-            row[castedVariable.Id] = -1;
-            row[newVariable.Id] = -1;
-            AddRowConstraint(row);
-            return newVariable;
-        }
-
-        public override IVariable MultiplyVariableByConstant(IVariable variable, IVariable constant, Domain domain)
-        {
-            var newVariable = CreateAnonymous(domain) as LpSolveVariable;
-            var castedVariable = (variable as LpSolveVariable);
-            var constantValue = (constant as LpSolveVariable).ConstantValue;
-            newVariable.ConstantValue = castedVariable.ConstantValue*constantValue;
-            var row = GetRowArray();
-            row[castedVariable.Id] = constantValue;
-            row[newVariable.Id] = -1;
-            AddRowConstraint(row);
-            return newVariable;
-        }
-
-        private void AddRowConstraint(double[] row)
-        {
-            if (!lpsolve.add_constraint(_lp, row, lpsolve.lpsolve_constr_types.EQ, 0))
+            Rows++;
+            if (!lpsolve.add_constraint(LpSolvePointer, row, type, val))
             {
                 throw new InvalidOperationException();
             }
         }
 
-        public override IVariable DivideVariableByConstant(IVariable variable, IVariable constant, Domain domain)
+        public LpSolveMilpSolver(int integerWidth) : base(integerWidth)
+        {
+            LpSolvePointer = lpsolve.make_lp(0, 0);
+        }
+
+        protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
+        {
+            var newVariable = CreateAnonymous(domain);
+            var row = GetRowArray();
+            row[VariableId(first)] = 1;
+            row[VariableId(second)] = 1;
+            row[VariableId(newVariable)] = -1;
+            AddRowConstraint(row);
+            return newVariable;
+        }
+
+        protected override IVariable InternalNegateVariable(IVariable variable, Domain domain)
+        {
+            var newVariable = CreateAnonymous(domain);
+            var row = GetRowArray();
+            row[VariableId(variable)] = -1;
+            row[VariableId(newVariable)] = -1;
+            AddRowConstraint(row);
+            return newVariable;
+        }
+
+        protected override IVariable InternalMultiplyVariableByConstant(IVariable variable, IVariable constant, Domain domain)
+        {
+            var newVariable = CreateAnonymous(domain) as LpSolveVariable;
+            var row = GetRowArray();
+            row[VariableId(variable)] = constant.ConstantValue.Value;
+            row[VariableId(newVariable)] = -1;
+            AddRowConstraint(row);
+            return newVariable;
+        }
+
+        protected override IVariable InternalDivideVariableByConstant(IVariable variable, IVariable constant, Domain domain)
         {
 
-            var newVariable = CreateAnonymous(domain) as LpSolveVariable;
-            var castedVariable = (variable as LpSolveVariable);
-            var constantValue = (constant as LpSolveVariable).ConstantValue;
-            newVariable.ConstantValue = castedVariable.ConstantValue / constantValue;
-            newVariable.Domain = domain;
+            var newVariable = CreateAnonymous(domain);
             var row = GetRowArray();
-            row[castedVariable.Id] = 1 / constantValue;
-            row[newVariable.Id] = -1;
+            row[VariableId(variable)] = 1 / constant.ConstantValue.Value;
+            row[VariableId(newVariable)] = -1;
             AddRowConstraint(row);
             return newVariable;
         }
@@ -116,44 +111,45 @@ namespace LpSolveMilpManager.Implementation
         public override void SetLessOrEqual(IVariable variable, IVariable bound)
         {
             var row = GetRowArray();
-            row[(variable as LpSolveVariable).Id] = 1;
-            row[(bound as LpSolveVariable).Id] = -1;
-            if (!lpsolve.add_constraint(_lp, row, lpsolve.lpsolve_constr_types.LE, 0))
-            {
-                throw new InvalidOperationException();
-            }
+            row[VariableId(variable)] = 1;
+            row[VariableId(bound)] = -1;
+            AddRowConstraint(row, lpsolve.lpsolve_constr_types.LE);
         }
 
-        public override IVariable FromConstant(int value, Domain domain)
+        protected override void InternalSetEqual(IVariable variable, IVariable bound)
         {
-            return FromConstant(1.0*value, domain);
-        }
-
-        public override IVariable FromConstant(double value, Domain domain)
-        {
-            var variable = CreateAnonymous(domain) as LpSolveVariable;
-            variable.ConstantValue = value;
             var row = GetRowArray();
-            row[variable.Id] = 1;
-            if (!lpsolve.add_constraint(_lp, row, lpsolve.lpsolve_constr_types.EQ, value))
-            {
-                throw new InvalidOperationException();
-            }
+            row[VariableId(variable)] = 1;
+            row[VariableId(bound)] = -1;
+            AddRowConstraint(row);
+        }
+
+        protected override IVariable InternalFromConstant(string name, int value, Domain domain)
+        {
+            return FromConstant((double)value, domain);
+        }
+
+        protected override IVariable InternalFromConstant(string name, double value, Domain domain)
+        {
+            var variable = Create(name, domain) as LpSolveVariable;
+            var row = GetRowArray();
+            row[VariableId(variable)] = 1;
+            AddRowConstraint(row, lpsolve.lpsolve_constr_types.EQ, value);
             return variable;
         }
 
-        public override IVariable Create(string name, Domain domain)
+        protected override IVariable InternalCreate(string name, Domain domain)
         {
             var variable = AddNewVariable();
             variable.Domain = domain;
             variable.Name = name;
-            if (!lpsolve.set_col_name(_lp, variable.Id, name))
+            if (!lpsolve.set_col_name(LpSolvePointer, variable.Id, name))
             {
                 throw new InvalidOperationException();
             }
             if (variable.IsBinary())
             {
-                if (!lpsolve.set_binary(_lp, variable.Id, true))
+                if (!lpsolve.set_binary(LpSolvePointer, variable.Id, true))
                 {
                     throw new InvalidOperationException();
                 }
@@ -161,28 +157,47 @@ namespace LpSolveMilpManager.Implementation
             }
             if (variable.IsInteger())
             {
-                if (!lpsolve.set_int(_lp, variable.Id, true))
+                if (!lpsolve.set_int(LpSolvePointer, variable.Id, true))
                 {
                     throw new InvalidOperationException();
                 }
             }
-            if (!lpsolve.set_bounds(_lp, variable.Id, -Int32.MaxValue, Int32.MaxValue))
-            {
-                throw new InvalidOperationException();
-            }
-            return variable;
-        }
 
-        public override IVariable CreateAnonymous(Domain domain)
-        {
-            return Create($"v_{tempId++}", domain);
+            switch (domain)
+            {
+                case Domain.AnyInteger:
+                case Domain.AnyReal:
+                case Domain.AnyConstantInteger:
+                case Domain.AnyConstantReal:
+                    if (!lpsolve.set_unbounded(LpSolvePointer, variable.Id))
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    break;
+                case Domain.PositiveOrZeroInteger:
+                case Domain.PositiveOrZeroReal:
+                case Domain.PositiveOrZeroConstantInteger:
+                case Domain.PositiveOrZeroConstantReal:
+                    if (!lpsolve.set_lowbo(LpSolvePointer, variable.Id, 0))
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    break;
+                case Domain.BinaryInteger:
+                case Domain.BinaryConstantInteger:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(domain), domain, null);
+            }
+
+            return variable;
         }
 
         public override void AddGoal(string name, IVariable operation)
         {
             var goal = GetRowArray();
-            goal[(operation as LpSolveVariable).Id] = 1;
-            if (!lpsolve.set_obj_fn(_lp, goal))
+            goal[VariableId(operation)] = 1;
+            if (!lpsolve.set_obj_fn(LpSolvePointer, goal))
             {
                 throw new InvalidOperationException();
             }
@@ -190,59 +205,57 @@ namespace LpSolveMilpManager.Implementation
 
         public override string GetGoalExpression(string name)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void SaveModelToFile(string modelPath)
         {
-            if (Path.GetExtension(modelPath) == "lp")
+            if (Path.GetExtension(modelPath).Trim('.').ToLower() == "lp")
             {
-                lpsolve.write_lp(_lp, modelPath);
+                lpsolve.write_lp(LpSolvePointer, modelPath);
             }
             else
             {
-                lpsolve.write_freemps(_lp, modelPath);
+                lpsolve.write_freemps(LpSolvePointer, modelPath);
             }
         }
 
         public override void LoadModelFromFile(string modelPath, string solverDataPath)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void SaveSolverDataToFile(string solverOutput)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override IVariable GetByName(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override IVariable TryGetByName(string name)
-        {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Solve()
         {
-            lpsolve.solve(_lp);
+            lpsolve.solve(LpSolvePointer);
         }
 
         public override double GetValue(IVariable variable)
         {
             var row = GetRowArray();
-            lpsolve.get_variables(_lp, row);
-            return row[(variable as LpSolveVariable).Id - 1];
+            lpsolve.get_variables(LpSolvePointer, row);
+            return row[VariableId(variable) - 1];
         }
 
         public override SolutionStatus GetStatus()
         {
-            var status = lpsolve.get_status(_lp);
-            if (status == (int)lpsolve.lpsolve_return.OPTIMAL)
+            var status = lpsolve.get_status(LpSolvePointer);
+            if (status == (int) lpsolve.lpsolve_return.OPTIMAL)
             {
                 return SolutionStatus.Optimal;
+            }
+            if (status == (int)lpsolve.lpsolve_return.UNBOUNDED)
+            {
+                return SolutionStatus.Unbounded;
+            }
+            if (status == (int)lpsolve.lpsolve_return.INFEASIBLE)
+            {
+                return SolutionStatus.Infeasible;
             }
 
             return SolutionStatus.Unknown;
