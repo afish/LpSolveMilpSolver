@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
@@ -50,7 +51,7 @@ namespace LpSolveMilpManager.Implementation
 
         private int VariableId(IVariable v)
         {
-            return (v as LpSolveVariable).Id;
+            return ((LpSolveVariable) v).Id;
         }
         private void AddRowConstraint(double[] row, lpsolve.lpsolve_constr_types type = lpsolve.lpsolve_constr_types.EQ, double val = 0)
         {
@@ -202,7 +203,7 @@ namespace LpSolveMilpManager.Implementation
             return variable;
         }
 
-        public override void AddGoal(string name, IVariable operation)
+        protected override void InternalAddGoal(string name, IVariable operation)
         {
             var goal = GetRowArray();
             goal[VariableId(operation)] = 1;
@@ -211,11 +212,6 @@ namespace LpSolveMilpManager.Implementation
             {
                 throw new InvalidOperationException();
             }
-        }
-
-        public override string GetGoalExpression(string name)
-        {
-            throw new NotImplementedException();
         }
 
         public override void SaveModelToFile(string modelPath)
@@ -237,7 +233,7 @@ namespace LpSolveMilpManager.Implementation
 
         protected override void InternalDeserialize(object o)
         {
-            var array = o as object[];
+            var array = (object[]) o;
             Rows = (int) array[0];
             Columns = (int) array[1];
         }
