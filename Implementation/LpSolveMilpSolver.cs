@@ -7,7 +7,7 @@ namespace LpSolveMilpManager.Implementation
 {
     public class LpSolveMilpSolver  : BaseMilpSolver
     {
-        public readonly IntPtr LpSolvePointer;
+        public IntPtr LpSolvePointer;
         public int Rows;
         public int Columns;
 
@@ -64,6 +64,7 @@ namespace LpSolveMilpManager.Implementation
         public LpSolveMilpSolver(int integerWidth) : base(integerWidth)
         {
             LpSolvePointer = lpsolve.make_lp(0, 0);
+            lpsolve.Init();
         }
 
         protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
@@ -114,6 +115,14 @@ namespace LpSolveMilpManager.Implementation
             row[VariableId(variable)] = 1;
             row[VariableId(bound)] = -1;
             AddRowConstraint(row, lpsolve.lpsolve_constr_types.LE);
+        }
+
+        public override void SetGreaterOrEqual(IVariable variable, IVariable bound)
+        {
+            var row = GetRowArray();
+            row[VariableId(variable)] = 1;
+            row[VariableId(bound)] = -1;
+            AddRowConstraint(row, lpsolve.lpsolve_constr_types.GE);
         }
 
         public override void SetEqual(IVariable variable, IVariable bound)
@@ -197,6 +206,7 @@ namespace LpSolveMilpManager.Implementation
         {
             var goal = GetRowArray();
             goal[VariableId(operation)] = 1;
+            lpsolve.set_maxim(LpSolvePointer);
             if (!lpsolve.set_obj_fn(LpSolvePointer, goal))
             {
                 throw new InvalidOperationException();
@@ -220,14 +230,30 @@ namespace LpSolveMilpManager.Implementation
             }
         }
 
-        public override void LoadModelFromFile(string modelPath, string solverDataPath)
+        protected override object GetObjectsToSerialize()
         {
-            throw new NotImplementedException();
+            return new object[] {Rows, Columns};
         }
 
-        public override void SaveSolverDataToFile(string solverOutput)
+        protected override void InternalDeserialize(object o)
         {
-            throw new NotImplementedException();
+            var array = o as object[];
+            Rows = (int) array[0];
+            Columns = (int) array[1];
+        }
+
+        protected override void InternalLoadModelFromFile(string modelPath)
+        {
+            lpsolve.delete_lp(LpSolvePointer);
+            lpsolve.Init();
+            if (Path.GetExtension(modelPath).Trim('.').ToLower() == "lp")
+            {
+                LpSolvePointer = lpsolve.read_LP(modelPath, 6, null);
+            }
+            else
+            {
+                LpSolvePointer = lpsolve.read_MPS(modelPath, 6);
+            }
         }
 
         public override void Solve()

@@ -1,10 +1,20 @@
-﻿using MilpManager.Abstraction;
+﻿using System;
+using MilpManager.Abstraction;
 
 namespace LpSolveMilpManager.Implementation
 {
+    [Serializable]
     public class LpSolveVariable : IVariable
     {
-        public IMilpManager MilpManager { get; set; }
+        [NonSerialized]
+        private IMilpManager _milpManager;
+
+        public IMilpManager MilpManager
+        {
+            get { return _milpManager; }
+            set { _milpManager = value; }
+        }
+
         public Domain Domain { get; set; }
         public double? ConstantValue { get; set; }
         public int Id { get; set; }
