@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
@@ -242,13 +241,15 @@ namespace LpSolveMilpManager.Implementation
         {
             lpsolve.delete_lp(LpSolvePointer);
             lpsolve.Init();
+            var IMPORTANT = 3;
+            var MPS_FREE = 8;
             if (Path.GetExtension(modelPath).Trim('.').ToLower() == "lp")
             {
-                LpSolvePointer = lpsolve.read_LP(modelPath, 6, null);
+                LpSolvePointer = lpsolve.read_LP(modelPath, IMPORTANT , null);
             }
             else
             {
-                LpSolvePointer = lpsolve.read_MPS(modelPath, 6);
+                LpSolvePointer = lpsolve.read_MPS(modelPath, IMPORTANT  | MPS_FREE);
             }
         }
 
