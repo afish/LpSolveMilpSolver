@@ -230,9 +230,9 @@ namespace LpSolveMilpManager.Implementation
             return new object[] {Rows, Columns};
         }
 
-        protected override void InternalDeserialize(object o)
+        protected override void InternalDeserialize(object data)
         {
-            var array = (object[]) o;
+            var array = (object[]) data;
             Rows = (int) array[0];
             Columns = (int) array[1];
         }

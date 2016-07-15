@@ -3,16 +3,16 @@ using System.Runtime.InteropServices;
 
 namespace LpSolveMilpManager
 {
-    public static class lpsolve
+    internal static class lpsolve
     {
-        public enum lpsolve_constr_types
+        internal enum lpsolve_constr_types
         {
             LE = 1,
             EQ = 3,
             GE = 2,
             FR = 0,
         }
-        public enum lpsolve_scales
+        internal enum lpsolve_scales
         {
             SCALE_EXTREME = 1,
             SCALE_RANGE = 2,
@@ -29,7 +29,7 @@ namespace LpSolveMilpManager
             SCALE_ROWSONLY = 512,
             SCALE_COLSONLY = 1024,
         }
-        public enum lpsolve_improves
+        internal enum lpsolve_improves
         {
             IMPROVE_NONE = 0,
             IMPROVE_SOLUTION = 1,
@@ -39,7 +39,7 @@ namespace LpSolveMilpManager
             IMPROVE_DEFAULT = (IMPROVE_DUALFEAS + IMPROVE_THETAGAP),
             IMPROVE_INVERSE = (IMPROVE_SOLUTION + IMPROVE_THETAGAP)
         }
-        public enum lpsolve_piv_rules
+        internal enum lpsolve_piv_rules
         {
             PRICER_FIRSTINDEX = 0,
             PRICER_DANTZIG = 1,
@@ -57,7 +57,7 @@ namespace LpSolveMilpManager
             PRICE_LOOPALTERNATE = 2048,
             PRICE_AUTOPARTIAL = lpsolve_piv_rules.PRICE_AUTOPARTIALCOLS + lpsolve_piv_rules.PRICE_AUTOPARTIALROWS,
         }
-        public enum lpsolve_presolve
+        internal enum lpsolve_presolve
         {
             PRESOLVE_NONE = 0,
             PRESOLVE_ROWS = 1,
@@ -80,7 +80,7 @@ namespace LpSolveMilpManager
             PRESOLVE_DUALS = 524288,
             PRESOLVE_SENSDUALS = 1048576
         }
-        public enum lpsolve_anti_degen
+        internal enum lpsolve_anti_degen
         {
             ANTIDEGEN_NONE = 0,
             ANTIDEGEN_FIXEDVARS = 1,
@@ -94,19 +94,19 @@ namespace LpSolveMilpManager
             ANTIDEGEN_RHSPERTURB = 256,
             ANTIDEGEN_BOUNDFLIP = 512
         }
-        public enum lpsolve_basiscrash
+        internal enum lpsolve_basiscrash
         {
             CRASH_NOTHING = 0,
             CRASH_MOSTFEASIBLE = 2,
         }
-        public enum lpsolve_simplextypes
+        internal enum lpsolve_simplextypes
         {
             SIMPLEX_PRIMAL_PRIMAL = 5,
             SIMPLEX_DUAL_PRIMAL = 6,
             SIMPLEX_PRIMAL_DUAL = 9,
             SIMPLEX_DUAL_DUAL = 10,
         }
-        public enum lpsolve_BBstrategies
+        internal enum lpsolve_BBstrategies
         {
             NODE_FIRSTSELECT = 0,
             NODE_GAPSELECT = 1,
@@ -130,7 +130,7 @@ namespace LpSolveMilpManager
             NODE_RCOSTFIXING = 16384,
             NODE_STRONGINIT = 32768
         }
-        public enum lpsolve_return
+        internal enum lpsolve_return
         {
             NOMEMORY = -2,
             OPTIMAL = 0,
@@ -147,7 +147,7 @@ namespace LpSolveMilpManager
             FEASFOUND = 12,
             NOFEASFOUND = 13,
         }
-        public enum lpsolve_branch
+        internal enum lpsolve_branch
         {
             BRANCH_CEILING = 0,
             BRANCH_FLOOR = 1,
@@ -155,7 +155,7 @@ namespace LpSolveMilpManager
             BRANCH_DEFAULT = 3,
         }
 
-        public enum lpsolve_msgmask
+        internal enum lpsolve_msgmask
         {
             MSG_PRESOLVE = 1,
             MSG_LPFEASIBLE = 8,
@@ -166,496 +166,496 @@ namespace LpSolveMilpManager
         }
 
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool add_column(IntPtr lp, double[] column);
+        internal static extern bool add_column(IntPtr lp, double[] column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool add_columnex(IntPtr lp, int count, double[] column, int[] rowno);
+        internal static extern bool add_columnex(IntPtr lp, int count, double[] column, int[] rowno);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool add_constraint(IntPtr lp, double[] row, lpsolve_constr_types constr_type, double rh);
+        internal static extern bool add_constraint(IntPtr lp, double[] row, lpsolve_constr_types constr_type, double rh);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool add_constraintex(IntPtr lp, int count, double[] row, int[] colno, lpsolve_constr_types constr_type, double rh);
+        internal static extern bool add_constraintex(IntPtr lp, int count, double[] row, int[] colno, lpsolve_constr_types constr_type, double rh);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool add_lag_con(IntPtr lp, double[] row, lpsolve_constr_types con_type, double rhs);
+        internal static extern bool add_lag_con(IntPtr lp, double[] row, lpsolve_constr_types con_type, double rhs);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int add_SOS(IntPtr lp, string name, int sostype, int priority, int count, int[] sosvars, double[] weights);
+        internal static extern int add_SOS(IntPtr lp, string name, int sostype, int priority, int count, int[] sosvars, double[] weights);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int column_in_lp(IntPtr lp, double[] column);
+        internal static extern int column_in_lp(IntPtr lp, double[] column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr copy_lp(IntPtr lp);
+        internal static extern IntPtr copy_lp(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void default_basis(IntPtr lp);
+        internal static extern void default_basis(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool del_column(IntPtr lp, int column);
+        internal static extern bool del_column(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool del_constraint(IntPtr lp, int del_row);
+        internal static extern bool del_constraint(IntPtr lp, int del_row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void delete_lp(IntPtr lp);
+        internal static extern void delete_lp(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool dualize_lp(IntPtr lp);
+        internal static extern bool dualize_lp(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_anti_degen get_anti_degen(IntPtr lp);
+        internal static extern lpsolve_anti_degen get_anti_degen(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_basis(IntPtr lp, int[] bascolumn, bool nonbasic);
+        internal static extern bool get_basis(IntPtr lp, int[] bascolumn, bool nonbasic);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_basiscrash get_basiscrash(IntPtr lp);
+        internal static extern lpsolve_basiscrash get_basiscrash(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_bb_depthlimit(IntPtr lp);
+        internal static extern int get_bb_depthlimit(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_branch get_bb_floorfirst(IntPtr lp);
+        internal static extern lpsolve_branch get_bb_floorfirst(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_BBstrategies get_bb_rule(IntPtr lp);
+        internal static extern lpsolve_BBstrategies get_bb_rule(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_bounds_tighter(IntPtr lp);
+        internal static extern bool get_bounds_tighter(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_break_at_value(IntPtr lp);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_col_name(IntPtr lp, int column);
+        internal static extern double get_break_at_value(IntPtr lp);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_col_name(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", EntryPoint = "get_col_name", SetLastError = true)]
         private unsafe static extern IntPtr get_col_name_c(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_column(IntPtr lp, int col_nr, double[] column);
+        internal static extern bool get_column(IntPtr lp, int col_nr, double[] column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_columnex(IntPtr lp, int col_nr, double[] column, int[] nzrow);
+        internal static extern int get_columnex(IntPtr lp, int col_nr, double[] column, int[] nzrow);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_constr_types get_constr_type(IntPtr lp, int row);
+        internal static extern lpsolve_constr_types get_constr_type(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_constr_value(IntPtr lp, int row, int count, double[] primsolution, int[] nzindex);
+        internal static extern double get_constr_value(IntPtr lp, int row, int count, double[] primsolution, int[] nzindex);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_constraints(IntPtr lp, double[] constr);
+        internal static extern bool get_constraints(IntPtr lp, double[] constr);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_dual_solution(IntPtr lp, double[] rc);
+        internal static extern bool get_dual_solution(IntPtr lp, double[] rc);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epsb(IntPtr lp);
+        internal static extern double get_epsb(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epsd(IntPtr lp);
+        internal static extern double get_epsd(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epsel(IntPtr lp);
+        internal static extern double get_epsel(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epsint(IntPtr lp);
+        internal static extern double get_epsint(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epsperturb(IntPtr lp);
+        internal static extern double get_epsperturb(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_epspivot(IntPtr lp);
+        internal static extern double get_epspivot(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_improves get_improve(IntPtr lp);
+        internal static extern lpsolve_improves get_improve(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_infinite(IntPtr lp);
+        internal static extern double get_infinite(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_lambda(IntPtr lp, double[] lambda);
+        internal static extern bool get_lambda(IntPtr lp, double[] lambda);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_lowbo(IntPtr lp, int column);
+        internal static extern double get_lowbo(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_lp_index(IntPtr lp, int orig_index);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_lp_name(IntPtr lp);
+        internal static extern int get_lp_index(IntPtr lp, int orig_index);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_lp_name(IntPtr lp);
         [DllImport("lpsolve55.dll", EntryPoint = "get_lp_name", SetLastError = true)]
         private unsafe static extern IntPtr get_lp_name_c(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_Lrows(IntPtr lp);
+        internal static extern int get_Lrows(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_mat(IntPtr lp, int row, int column);
+        internal static extern double get_mat(IntPtr lp, int row, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_max_level(IntPtr lp);
+        internal static extern int get_max_level(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_maxpivot(IntPtr lp);
+        internal static extern int get_maxpivot(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_mip_gap(IntPtr lp, bool absolute);
+        internal static extern double get_mip_gap(IntPtr lp, bool absolute);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_Ncolumns(IntPtr lp);
+        internal static extern int get_Ncolumns(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_negrange(IntPtr lp);
+        internal static extern double get_negrange(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_nameindex(IntPtr lp, string name, bool isrow);
+        internal static extern int get_nameindex(IntPtr lp, string name, bool isrow);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_nonzeros(IntPtr lp);
+        internal static extern int get_nonzeros(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_Norig_columns(IntPtr lp);
+        internal static extern int get_Norig_columns(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_Norig_rows(IntPtr lp);
+        internal static extern int get_Norig_rows(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_Nrows(IntPtr lp);
+        internal static extern int get_Nrows(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_obj_bound(IntPtr lp);
+        internal static extern double get_obj_bound(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_objective(IntPtr lp);
+        internal static extern double get_objective(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_orig_index(IntPtr lp, IntPtr lp_index);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_origcol_name(IntPtr lp, int column);
+        internal static extern int get_orig_index(IntPtr lp, IntPtr lp_index);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_origcol_name(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", EntryPoint = "get_origcol_name", SetLastError = true)]
         private unsafe static extern IntPtr get_origcol_name_c(IntPtr lp, int column);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_origrow_name(IntPtr lp, int row);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_origrow_name(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", EntryPoint = "get_origrow_name", SetLastError = true)]
         private unsafe static extern IntPtr get_origrow_name_c(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_piv_rules get_pivoting(IntPtr lp);
+        internal static extern lpsolve_piv_rules get_pivoting(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_presolve get_presolve(IntPtr lp);
+        internal static extern lpsolve_presolve get_presolve(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_presolveloops(IntPtr lp);
+        internal static extern int get_presolveloops(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_primal_solution(IntPtr lp, ref double pv);
+        internal static extern bool get_primal_solution(IntPtr lp, ref double pv);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_print_sol(IntPtr lp);
+        internal static extern int get_print_sol(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_PseudoCosts(IntPtr lp, double[] clower, double[] cupper, int[] updatelimit);
+        internal static extern bool get_PseudoCosts(IntPtr lp, double[] clower, double[] cupper, int[] updatelimit);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_rh(IntPtr lp, int row);
+        internal static extern double get_rh(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_rh_range(IntPtr lp, int row);
+        internal static extern double get_rh_range(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_row(IntPtr lp, int row_nr, double[] row);
+        internal static extern bool get_row(IntPtr lp, int row_nr, double[] row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_rowex(IntPtr lp, int row_nr, double[] row, int[] colno);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_row_name(IntPtr lp, int row);
+        internal static extern int get_rowex(IntPtr lp, int row_nr, double[] row, int[] colno);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_row_name(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", EntryPoint = "get_row_name", SetLastError = true)]
         private unsafe static extern IntPtr get_row_name_c(IntPtr lp, int row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_scalelimit(IntPtr lp);
+        internal static extern double get_scalelimit(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_scales get_scaling(IntPtr lp);
+        internal static extern lpsolve_scales get_scaling(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_sensitivity_obj(IntPtr lp, double[] objfrom, double[] objtill);
+        internal static extern bool get_sensitivity_obj(IntPtr lp, double[] objfrom, double[] objtill);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_sensitivity_objex(IntPtr lp, double[] objfrom, double[] objtill, double[] objfromvalue, double[] objtillvalue);
+        internal static extern bool get_sensitivity_objex(IntPtr lp, double[] objfrom, double[] objtill, double[] objfromvalue, double[] objtillvalue);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_sensitivity_rhs(IntPtr lp, double[] duals, double[] dualsfrom, double[] dualstill);
+        internal static extern bool get_sensitivity_rhs(IntPtr lp, double[] duals, double[] dualsfrom, double[] dualstill);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_simplextypes get_simplextype(IntPtr lp);
+        internal static extern lpsolve_simplextypes get_simplextype(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_solutioncount(IntPtr lp);
+        internal static extern int get_solutioncount(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_solutionlimit(IntPtr lp);
+        internal static extern int get_solutionlimit(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_status(IntPtr lp);
-        //[DllImport("lpsolve55.dll", SetLastError=true)] public static extern string get_statustext(IntPtr lp, int statuscode);
+        internal static extern int get_status(IntPtr lp);
+        //[DllImport("lpsolve55.dll", SetLastError=true)] internal static extern string get_statustext(IntPtr lp, int statuscode);
         [DllImport("lpsolve55.dll", EntryPoint = "get_statustext", SetLastError = true)]
         private unsafe static extern IntPtr get_statustext_c(IntPtr lp, int statuscode);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_timeout(IntPtr lp);
+        internal static extern int get_timeout(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern long get_total_iter(IntPtr lp);
+        internal static extern long get_total_iter(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern long get_total_nodes(IntPtr lp);
+        internal static extern long get_total_nodes(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_upbo(IntPtr lp, int column);
+        internal static extern double get_upbo(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_branch get_var_branch(IntPtr lp, int column);
+        internal static extern lpsolve_branch get_var_branch(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_var_dualresult(IntPtr lp, int index);
+        internal static extern double get_var_dualresult(IntPtr lp, int index);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_var_primalresult(IntPtr lp, int index);
+        internal static extern double get_var_primalresult(IntPtr lp, int index);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_var_priority(IntPtr lp, int column);
+        internal static extern int get_var_priority(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool get_variables(IntPtr lp, double[] var);
+        internal static extern bool get_variables(IntPtr lp, double[] var);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern int get_verbose(IntPtr lp);
+        internal static extern int get_verbose(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double get_working_objective(IntPtr lp);
+        internal static extern double get_working_objective(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool guess_basis(IntPtr lp, double[] guessvector, int[] basisvector);
+        internal static extern bool guess_basis(IntPtr lp, double[] guessvector, int[] basisvector);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool has_BFP(IntPtr lp);
+        internal static extern bool has_BFP(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool has_XLI(IntPtr lp);
+        internal static extern bool has_XLI(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_add_rowmode(IntPtr lp);
+        internal static extern bool is_add_rowmode(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_anti_degen(IntPtr lp, lpsolve_scales testmask);
+        internal static extern bool is_anti_degen(IntPtr lp, lpsolve_scales testmask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_binary(IntPtr lp, int column);
+        internal static extern bool is_binary(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_break_at_first(IntPtr lp);
+        internal static extern bool is_break_at_first(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_constr_type(IntPtr lp, int row, int mask);
+        internal static extern bool is_constr_type(IntPtr lp, int row, int mask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_debug(IntPtr lp);
+        internal static extern bool is_debug(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_feasible(IntPtr lp, double[] values, double threshold);
+        internal static extern bool is_feasible(IntPtr lp, double[] values, double threshold);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_infinite(IntPtr lp, double value);
+        internal static extern bool is_infinite(IntPtr lp, double value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_int(IntPtr lp, int column);
+        internal static extern bool is_int(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_integerscaling(IntPtr lp);
+        internal static extern bool is_integerscaling(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_lag_trace(IntPtr lp);
+        internal static extern bool is_lag_trace(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_maxim(IntPtr lp);
+        internal static extern bool is_maxim(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_nativeBFP(IntPtr lp);
+        internal static extern bool is_nativeBFP(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_nativeXLI(IntPtr lp);
+        internal static extern bool is_nativeXLI(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_negative(IntPtr lp, int column);
+        internal static extern bool is_negative(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_piv_mode(IntPtr lp, lpsolve_scales testmask);
+        internal static extern bool is_piv_mode(IntPtr lp, lpsolve_scales testmask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_piv_rule(IntPtr lp, lpsolve_piv_rules rule);
+        internal static extern bool is_piv_rule(IntPtr lp, lpsolve_piv_rules rule);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_presolve(IntPtr lp, lpsolve_scales testmask);
+        internal static extern bool is_presolve(IntPtr lp, lpsolve_scales testmask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_scalemode(IntPtr lp, lpsolve_scales testmask);
+        internal static extern bool is_scalemode(IntPtr lp, lpsolve_scales testmask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_scaletype(IntPtr lp, lpsolve_scales scaletype);
+        internal static extern bool is_scaletype(IntPtr lp, lpsolve_scales scaletype);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_semicont(IntPtr lp, int column);
+        internal static extern bool is_semicont(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_SOS_var(IntPtr lp, int column);
+        internal static extern bool is_SOS_var(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_trace(IntPtr lp);
+        internal static extern bool is_trace(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_unbounded(IntPtr lp, int column);
+        internal static extern bool is_unbounded(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool is_use_names(IntPtr lp, bool isrow);
+        internal static extern bool is_use_names(IntPtr lp, bool isrow);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void lp_solve_version(ref int majorversion, ref int minorversion, ref int release, ref int build);
+        internal static extern void lp_solve_version(ref int majorversion, ref int minorversion, ref int release, ref int build);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr make_lp(int rows, int columns);
+        internal static extern IntPtr make_lp(int rows, int columns);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr resize_lp(IntPtr lp, int rows, int columns);
+        internal static extern IntPtr resize_lp(IntPtr lp, int rows, int columns);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_constraints(IntPtr lp, int columns);
+        internal static extern void print_constraints(IntPtr lp, int columns);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool print_debugdump(IntPtr lp, string filename);
+        internal static extern bool print_debugdump(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_duals(IntPtr lp);
+        internal static extern void print_duals(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_lp(IntPtr lp);
+        internal static extern void print_lp(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_objective(IntPtr lp);
+        internal static extern void print_objective(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_scales(IntPtr lp);
+        internal static extern void print_scales(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_solution(IntPtr lp, int columns);
+        internal static extern void print_solution(IntPtr lp, int columns);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_str(IntPtr lp, string str);
+        internal static extern void print_str(IntPtr lp, string str);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void print_tableau(IntPtr lp);
-        public delegate bool ctrlcfunc(IntPtr lp, int userhandle);
+        internal static extern void print_tableau(IntPtr lp);
+        internal delegate bool ctrlcfunc(IntPtr lp, int userhandle);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void put_abortfunc(IntPtr lp, ctrlcfunc newctrlc, int ctrlchandle);
-        public delegate void logfunc(IntPtr lp, int userhandle, string buf);
+        internal static extern void put_abortfunc(IntPtr lp, ctrlcfunc newctrlc, int ctrlchandle);
+        internal delegate void logfunc(IntPtr lp, int userhandle, string buf);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void put_logfunc(IntPtr lp, logfunc newlog, int loghandle);
-        public delegate void msgfunc(IntPtr lp, int userhandle, lpsolve_msgmask message);
+        internal static extern void put_logfunc(IntPtr lp, logfunc newlog, int loghandle);
+        internal delegate void msgfunc(IntPtr lp, int userhandle, lpsolve_msgmask message);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void put_msgfunc(IntPtr lp, msgfunc newmsg, int msghandle, int mask);
+        internal static extern void put_msgfunc(IntPtr lp, msgfunc newmsg, int msghandle, int mask);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool read_basis(IntPtr lp, string filename, string info);
+        internal static extern bool read_basis(IntPtr lp, string filename, string info);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr read_freeMPS(string filename, int options);
+        internal static extern IntPtr read_freeMPS(string filename, int options);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr read_LP(string filename, int verbose, string lp_name);
+        internal static extern IntPtr read_LP(string filename, int verbose, string lp_name);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr read_MPS(string filename, int options);
+        internal static extern IntPtr read_MPS(string filename, int options);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern IntPtr read_XLI(string xliname, string modelname, string dataname, string options, int verbose);
+        internal static extern IntPtr read_XLI(string xliname, string modelname, string dataname, string options, int verbose);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool read_params(IntPtr lp, string filename, string options);
+        internal static extern bool read_params(IntPtr lp, string filename, string options);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void reset_basis(IntPtr lp);
+        internal static extern void reset_basis(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void reset_params(IntPtr lp);
+        internal static extern void reset_params(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_add_rowmode(IntPtr lp, bool turnon);
+        internal static extern bool set_add_rowmode(IntPtr lp, bool turnon);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_anti_degen(IntPtr lp, lpsolve_anti_degen anti_degen);
+        internal static extern void set_anti_degen(IntPtr lp, lpsolve_anti_degen anti_degen);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_basis(IntPtr lp, int[] bascolumn, bool nonbasic);
+        internal static extern bool set_basis(IntPtr lp, int[] bascolumn, bool nonbasic);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_basiscrash(IntPtr lp, lpsolve_basiscrash mode);
+        internal static extern void set_basiscrash(IntPtr lp, lpsolve_basiscrash mode);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_basisvar(IntPtr lp, int basisPos, int enteringCol);
+        internal static extern void set_basisvar(IntPtr lp, int basisPos, int enteringCol);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_bb_depthlimit(IntPtr lp, int bb_maxlevel);
+        internal static extern void set_bb_depthlimit(IntPtr lp, int bb_maxlevel);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_bb_floorfirst(IntPtr lp, lpsolve_branch bb_floorfirst);
+        internal static extern void set_bb_floorfirst(IntPtr lp, lpsolve_branch bb_floorfirst);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_bb_rule(IntPtr lp, lpsolve_BBstrategies bb_rule);
+        internal static extern void set_bb_rule(IntPtr lp, lpsolve_BBstrategies bb_rule);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_BFP(IntPtr lp, string filename);
+        internal static extern bool set_BFP(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_binary(IntPtr lp, int column, bool must_be_bin);
+        internal static extern bool set_binary(IntPtr lp, int column, bool must_be_bin);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_bounds(IntPtr lp, int column, double lower, double upper);
+        internal static extern bool set_bounds(IntPtr lp, int column, double lower, double upper);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_bounds_tighter(IntPtr lp, bool tighten);
+        internal static extern void set_bounds_tighter(IntPtr lp, bool tighten);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_break_at_first(IntPtr lp, bool break_at_first);
+        internal static extern void set_break_at_first(IntPtr lp, bool break_at_first);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_break_at_value(IntPtr lp, double break_at_value);
+        internal static extern void set_break_at_value(IntPtr lp, double break_at_value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_col_name(IntPtr lp, int column, string new_name);
+        internal static extern bool set_col_name(IntPtr lp, int column, string new_name);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_column(IntPtr lp, int col_no, double[] column);
+        internal static extern bool set_column(IntPtr lp, int col_no, double[] column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_columnex(IntPtr lp, int col_no, int count, double[] column, int[] rowno);
+        internal static extern bool set_columnex(IntPtr lp, int col_no, int count, double[] column, int[] rowno);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_constr_type(IntPtr lp, int row, lpsolve_constr_types con_type);
+        internal static extern bool set_constr_type(IntPtr lp, int row, lpsolve_constr_types con_type);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_debug(IntPtr lp, bool debug);
+        internal static extern void set_debug(IntPtr lp, bool debug);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epsb(IntPtr lp, double epsb);
+        internal static extern void set_epsb(IntPtr lp, double epsb);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epsd(IntPtr lp, double epsd);
+        internal static extern void set_epsd(IntPtr lp, double epsd);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epsel(IntPtr lp, double epsel);
+        internal static extern void set_epsel(IntPtr lp, double epsel);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epsint(IntPtr lp, double epsint);
+        internal static extern void set_epsint(IntPtr lp, double epsint);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_epslevel(IntPtr lp, int level);
+        internal static extern bool set_epslevel(IntPtr lp, int level);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epsperturb(IntPtr lp, double epsperturb);
+        internal static extern void set_epsperturb(IntPtr lp, double epsperturb);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_epspivot(IntPtr lp, double epspivot);
+        internal static extern void set_epspivot(IntPtr lp, double epspivot);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_improve(IntPtr lp, lpsolve_improves improve);
+        internal static extern void set_improve(IntPtr lp, lpsolve_improves improve);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_infinite(IntPtr lp, double infinite);
+        internal static extern void set_infinite(IntPtr lp, double infinite);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_int(IntPtr lp, int column, bool must_be_int);
+        internal static extern bool set_int(IntPtr lp, int column, bool must_be_int);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_lag_trace(IntPtr lp, bool lag_trace);
+        internal static extern void set_lag_trace(IntPtr lp, bool lag_trace);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_lowbo(IntPtr lp, int column, double value);
+        internal static extern bool set_lowbo(IntPtr lp, int column, double value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_lp_name(IntPtr lp, string lpname);
+        internal static extern bool set_lp_name(IntPtr lp, string lpname);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_mat(IntPtr lp, int row, int column, double value);
+        internal static extern bool set_mat(IntPtr lp, int row, int column, double value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_maxim(IntPtr lp);
+        internal static extern void set_maxim(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_maxpivot(IntPtr lp, int max_num_inv);
+        internal static extern void set_maxpivot(IntPtr lp, int max_num_inv);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_minim(IntPtr lp);
+        internal static extern void set_minim(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_mip_gap(IntPtr lp, bool absolute, double mip_gap);
+        internal static extern void set_mip_gap(IntPtr lp, bool absolute, double mip_gap);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_negrange(IntPtr lp, double negrange);
+        internal static extern void set_negrange(IntPtr lp, double negrange);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_obj(IntPtr lp, int Column, double Value);
+        internal static extern bool set_obj(IntPtr lp, int Column, double Value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_obj_bound(IntPtr lp, double obj_bound);
+        internal static extern void set_obj_bound(IntPtr lp, double obj_bound);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_obj_fn(IntPtr lp, double[] row);
+        internal static extern bool set_obj_fn(IntPtr lp, double[] row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_obj_fnex(IntPtr lp, int count, double[] row, int[] colno);
+        internal static extern bool set_obj_fnex(IntPtr lp, int count, double[] row, int[] colno);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_outputfile(IntPtr lp, string filename);
+        internal static extern bool set_outputfile(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_pivoting(IntPtr lp, lpsolve_piv_rules piv_rule);
+        internal static extern void set_pivoting(IntPtr lp, lpsolve_piv_rules piv_rule);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_preferdual(IntPtr lp, bool dodual);
+        internal static extern void set_preferdual(IntPtr lp, bool dodual);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_presolve(IntPtr lp, lpsolve_presolve do_presolve, int maxloops);
+        internal static extern void set_presolve(IntPtr lp, lpsolve_presolve do_presolve, int maxloops);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_print_sol(IntPtr lp, int print_sol);
+        internal static extern void set_print_sol(IntPtr lp, int print_sol);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_PseudoCosts(IntPtr lp, double[] clower, double[] cupper, int[] updatelimit);
+        internal static extern bool set_PseudoCosts(IntPtr lp, double[] clower, double[] cupper, int[] updatelimit);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_rh(IntPtr lp, int row, double value);
+        internal static extern bool set_rh(IntPtr lp, int row, double value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_rh_range(IntPtr lp, int row, double deltavalue);
+        internal static extern bool set_rh_range(IntPtr lp, int row, double deltavalue);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_rh_vec(IntPtr lp, double[] rh);
+        internal static extern void set_rh_vec(IntPtr lp, double[] rh);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_row(IntPtr lp, int row_no, double[] row);
+        internal static extern bool set_row(IntPtr lp, int row_no, double[] row);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_row_name(IntPtr lp, int row, string new_name);
+        internal static extern bool set_row_name(IntPtr lp, int row, string new_name);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_rowex(IntPtr lp, int row_no, int count, double[] row, int[] colno);
+        internal static extern bool set_rowex(IntPtr lp, int row_no, int count, double[] row, int[] colno);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_scalelimit(IntPtr lp, double scalelimit);
+        internal static extern void set_scalelimit(IntPtr lp, double scalelimit);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_scaling(IntPtr lp, lpsolve_scales scalemode);
+        internal static extern void set_scaling(IntPtr lp, lpsolve_scales scalemode);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_semicont(IntPtr lp, int column, bool must_be_sc);
+        internal static extern bool set_semicont(IntPtr lp, int column, bool must_be_sc);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_sense(IntPtr lp, bool maximize);
+        internal static extern void set_sense(IntPtr lp, bool maximize);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_simplextype(IntPtr lp, lpsolve_simplextypes simplextype);
+        internal static extern void set_simplextype(IntPtr lp, lpsolve_simplextypes simplextype);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_solutionlimit(IntPtr lp, int limit);
+        internal static extern void set_solutionlimit(IntPtr lp, int limit);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_timeout(IntPtr lp, long sectimeout);
+        internal static extern void set_timeout(IntPtr lp, long sectimeout);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_trace(IntPtr lp, bool trace);
+        internal static extern void set_trace(IntPtr lp, bool trace);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_unbounded(IntPtr lp, int column);
+        internal static extern bool set_unbounded(IntPtr lp, int column);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_upbo(IntPtr lp, int column, double value);
+        internal static extern bool set_upbo(IntPtr lp, int column, double value);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_use_names(IntPtr lp, bool isrow, bool use_names);
+        internal static extern void set_use_names(IntPtr lp, bool isrow, bool use_names);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_var_branch(IntPtr lp, int column, lpsolve_branch branch_mode);
+        internal static extern bool set_var_branch(IntPtr lp, int column, lpsolve_branch branch_mode);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_var_weights(IntPtr lp, double[] weights);
+        internal static extern bool set_var_weights(IntPtr lp, double[] weights);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void set_verbose(IntPtr lp, int verbose);
+        internal static extern void set_verbose(IntPtr lp, int verbose);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool set_XLI(IntPtr lp, string filename);
+        internal static extern bool set_XLI(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern lpsolve_return solve(IntPtr lp);
+        internal static extern lpsolve_return solve(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool str_add_column(IntPtr lp, string col_string);
+        internal static extern bool str_add_column(IntPtr lp, string col_string);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool str_add_constraint(IntPtr lp, string row_string, lpsolve_constr_types constr_type, double rh);
+        internal static extern bool str_add_constraint(IntPtr lp, string row_string, lpsolve_constr_types constr_type, double rh);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool str_add_lag_con(IntPtr lp, string row_string, lpsolve_constr_types con_type, double rhs);
+        internal static extern bool str_add_lag_con(IntPtr lp, string row_string, lpsolve_constr_types con_type, double rhs);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool str_set_obj_fn(IntPtr lp, string row_string);
+        internal static extern bool str_set_obj_fn(IntPtr lp, string row_string);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool str_set_rh_vec(IntPtr lp, string rh_string);
+        internal static extern bool str_set_rh_vec(IntPtr lp, string rh_string);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern double time_elapsed(IntPtr lp);
+        internal static extern double time_elapsed(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern void unscale(IntPtr lp);
+        internal static extern void unscale(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_basis(IntPtr lp, string filename);
+        internal static extern bool write_basis(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_freemps(IntPtr lp, string filename);
+        internal static extern bool write_freemps(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_lp(IntPtr lp, string filename);
+        internal static extern bool write_lp(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_mps(IntPtr lp, string filename);
+        internal static extern bool write_mps(IntPtr lp, string filename);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_XLI(IntPtr lp, string filename, string options, bool results);
+        internal static extern bool write_XLI(IntPtr lp, string filename, string options, bool results);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern bool write_params(IntPtr lp, string filename, string options);
+        internal static extern bool write_params(IntPtr lp, string filename, string options);
 
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        public static extern byte is_obj_in_basis(IntPtr lp);
+        internal static extern byte is_obj_in_basis(IntPtr lp);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        unsafe public static extern byte get_ptr_sensitivity_obj(IntPtr lp, ref double* objfrom, ref double* objtill);
+        unsafe internal static extern byte get_ptr_sensitivity_obj(IntPtr lp, ref double* objfrom, ref double* objtill);
         [DllImport("lpsolve55.dll", SetLastError = true)]
         internal static extern void set_obj_in_basis(IntPtr lp, bool obj_in_basis);
         [DllImport("lpsolve55.dll", SetLastError = true)]
-        unsafe public static extern byte get_ptr_sensitivity_rhs(IntPtr lp, ref double* duals, ref double* dualsfrom, ref double* dualstill);
+        unsafe internal static extern byte get_ptr_sensitivity_rhs(IntPtr lp, ref double* duals, ref double* dualsfrom, ref double* dualstill);
 
-        public static string get_col_name(IntPtr lp, int column)
+        internal static string get_col_name(IntPtr lp, int column)
         {
             return (Marshal.PtrToStringAnsi(get_col_name_c(lp, column)));
         }
 
-        public static string get_lp_name(IntPtr lp)
+        internal static string get_lp_name(IntPtr lp)
         {
             return (Marshal.PtrToStringAnsi(get_lp_name_c(lp)));
         }
 
-        public static string get_origcol_name(IntPtr lp, int column)
+        internal static string get_origcol_name(IntPtr lp, int column)
         {
             return (Marshal.PtrToStringAnsi(get_origcol_name_c(lp, column)));
         }
 
-        public static string get_origrow_name(IntPtr lp, int row)
+        internal static string get_origrow_name(IntPtr lp, int row)
         {
             return (Marshal.PtrToStringAnsi(get_origrow_name_c(lp, row)));
         }
 
-        public static string get_row_name(IntPtr lp, int row)
+        internal static string get_row_name(IntPtr lp, int row)
         {
             return (Marshal.PtrToStringAnsi(get_row_name_c(lp, row)));
         }
 
-        public static string get_statustext(IntPtr lp, int statuscode)
+        internal static string get_statustext(IntPtr lp, int statuscode)
         {
             return (Marshal.PtrToStringAnsi(get_statustext_c(lp, statuscode)));
         }
@@ -676,7 +676,7 @@ namespace LpSolveMilpManager
         }
 
 
-        public static bool Init()
+        internal static bool Init()
         {
             return Init("");
         }
@@ -684,7 +684,7 @@ namespace LpSolveMilpManager
 
         static bool bEnvChanged = false;
 
-        public static bool Init(string dllPath)
+        internal static bool Init(string dllPath)
         {
             string Path;
             string Buf;
