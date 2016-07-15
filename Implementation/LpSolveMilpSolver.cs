@@ -61,7 +61,7 @@ namespace LpSolveMilpManager.Implementation
             }
         }
 
-        public LpSolveMilpSolver(int integerWidth) : base(integerWidth)
+        public LpSolveMilpSolver(int integerWidth, double epsilon = 0.000000001) : base(integerWidth, epsilon)
         {
             LpSolvePointer = lpsolve.make_lp(0, 0);
             lpsolve.Init();
