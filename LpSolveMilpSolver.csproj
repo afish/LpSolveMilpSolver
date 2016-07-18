@@ -38,8 +38,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MilpManager, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MilpManager.2.0.0.0\lib\net40\MilpManager.dll</HintPath>
+    <Reference Include="MilpManager, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MilpManager.2.1.0.0\lib\net40\MilpManager.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
