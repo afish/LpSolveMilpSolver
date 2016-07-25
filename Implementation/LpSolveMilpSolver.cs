@@ -67,6 +67,11 @@ namespace LpSolveMilpManager.Implementation
             lpsolve.Init();
         }
 
+        public LpSolveMilpSolver(IntPtr lpsolveInstance, int integerWidth, double epsilon) : base(integerWidth, epsilon)
+        {
+            LpSolvePointer = lpsolveInstance;
+        }
+
         protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
         {
             var newVariable = CreateAnonymous(domain);
