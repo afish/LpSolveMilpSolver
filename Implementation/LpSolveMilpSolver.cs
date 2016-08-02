@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using LpSolveDotNet;
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
 
@@ -7,9 +8,9 @@ namespace LpSolveMilpManager.Implementation
 {
     public class LpSolveMilpSolver  : BaseMilpSolver
     {
-        public IntPtr LpSolvePointer;
-        public int Rows;
-        public int Columns;
+        public LpSolve LpSolvePointer { get; private set; }
+        public int Rows { get; private set; }
+        public int Columns { get; private set; }
 
         private double[] GetEmptyArray(int count)
         {
@@ -40,7 +41,7 @@ namespace LpSolveMilpManager.Implementation
                 MilpManager = this
             };
 
-            if (!lpsolve.add_column(LpSolvePointer, GetColumnArray()))
+            if (!LpSolvePointer.add_column(GetColumnArray()))
             {
                 throw new InvalidOperationException();
             }
@@ -52,10 +53,10 @@ namespace LpSolveMilpManager.Implementation
         {
             return ((LpSolveVariable) v).Id;
         }
-        private void AddRowConstraint(double[] row, lpsolve.lpsolve_constr_types type = lpsolve.lpsolve_constr_types.EQ, double val = 0)
+        private void AddRowConstraint(double[] row, lpsolve_constr_types type = lpsolve_constr_types.EQ, double val = 0)
         {
             Rows++;
-            if (!lpsolve.add_constraint(LpSolvePointer, row, type, val))
+            if (!LpSolvePointer.add_constraint(row, type, val))
             {
                 throw new InvalidOperationException();
             }
@@ -63,11 +64,11 @@ namespace LpSolveMilpManager.Implementation
 
         public LpSolveMilpSolver(int integerWidth, double epsilon = 0.000000001) : base(integerWidth, epsilon)
         {
-            LpSolvePointer = lpsolve.make_lp(0, 0);
-            lpsolve.Init();
+            LpSolve.Init();
+            LpSolvePointer = LpSolve.make_lp(0, 0);
         }
 
-        public LpSolveMilpSolver(IntPtr lpsolveInstance, int integerWidth, double epsilon) : base(integerWidth, epsilon)
+        public LpSolveMilpSolver(LpSolve lpsolveInstance, int integerWidth, double epsilon) : base(integerWidth, epsilon)
         {
             LpSolvePointer = lpsolveInstance;
         }
@@ -119,7 +120,7 @@ namespace LpSolveMilpManager.Implementation
             var row = GetRowArray();
             row[VariableId(variable)] = 1;
             row[VariableId(bound)] = -1;
-            AddRowConstraint(row, lpsolve.lpsolve_constr_types.LE);
+            AddRowConstraint(row, lpsolve_constr_types.LE);
         }
 
         public override void SetGreaterOrEqual(IVariable variable, IVariable bound)
@@ -127,7 +128,7 @@ namespace LpSolveMilpManager.Implementation
             var row = GetRowArray();
             row[VariableId(variable)] = 1;
             row[VariableId(bound)] = -1;
-            AddRowConstraint(row, lpsolve.lpsolve_constr_types.GE);
+            AddRowConstraint(row, lpsolve_constr_types.GE);
         }
 
         public override void SetEqual(IVariable variable, IVariable bound)
@@ -148,7 +149,7 @@ namespace LpSolveMilpManager.Implementation
             var variable = Create(name, domain) as LpSolveVariable;
             var row = GetRowArray();
             row[VariableId(variable)] = 1;
-            AddRowConstraint(row, lpsolve.lpsolve_constr_types.EQ, value);
+            AddRowConstraint(row, lpsolve_constr_types.EQ, value);
             return variable;
         }
 
@@ -157,13 +158,13 @@ namespace LpSolveMilpManager.Implementation
             var variable = AddNewVariable();
             variable.Domain = domain;
             variable.Name = name;
-            if (!lpsolve.set_col_name(LpSolvePointer, variable.Id, name))
+            if (!LpSolvePointer.set_col_name(variable.Id, name))
             {
                 throw new InvalidOperationException();
             }
             if (variable.IsBinary())
             {
-                if (!lpsolve.set_binary(LpSolvePointer, variable.Id, true))
+                if (!LpSolvePointer.set_binary(variable.Id, true))
                 {
                     throw new InvalidOperationException();
                 }
@@ -171,7 +172,7 @@ namespace LpSolveMilpManager.Implementation
             }
             if (variable.IsInteger())
             {
-                if (!lpsolve.set_int(LpSolvePointer, variable.Id, true))
+                if (!LpSolvePointer.set_int(variable.Id, true))
                 {
                     throw new InvalidOperationException();
                 }
@@ -183,7 +184,7 @@ namespace LpSolveMilpManager.Implementation
                 case Domain.AnyReal:
                 case Domain.AnyConstantInteger:
                 case Domain.AnyConstantReal:
-                    if (!lpsolve.set_unbounded(LpSolvePointer, variable.Id))
+                    if (!LpSolvePointer.set_unbounded(variable.Id))
                     {
                         throw new InvalidOperationException();
                     }
@@ -192,7 +193,7 @@ namespace LpSolveMilpManager.Implementation
                 case Domain.PositiveOrZeroReal:
                 case Domain.PositiveOrZeroConstantInteger:
                 case Domain.PositiveOrZeroConstantReal:
-                    if (!lpsolve.set_lowbo(LpSolvePointer, variable.Id, 0))
+                    if (!LpSolvePointer.set_lowbo(variable.Id, 0))
                     {
                         throw new InvalidOperationException();
                     }
@@ -211,8 +212,8 @@ namespace LpSolveMilpManager.Implementation
         {
             var goal = GetRowArray();
             goal[VariableId(operation)] = 1;
-            lpsolve.set_maxim(LpSolvePointer);
-            if (!lpsolve.set_obj_fn(LpSolvePointer, goal))
+            LpSolvePointer.set_maxim();
+            if (!LpSolvePointer.set_obj_fn(goal))
             {
                 throw new InvalidOperationException();
             }
@@ -220,13 +221,13 @@ namespace LpSolveMilpManager.Implementation
 
         public override void SaveModelToFile(string modelPath)
         {
-            if (Path.GetExtension(modelPath).Trim('.').ToLower() == "lp")
+            if (Path.GetExtension(modelPath)?.Trim('.').ToLower() == "lp")
             {
-                lpsolve.write_lp(LpSolvePointer, modelPath);
+                LpSolvePointer.write_lp(modelPath);
             }
             else
             {
-                lpsolve.write_freemps(LpSolvePointer, modelPath);
+                LpSolvePointer.write_freemps(modelPath);
             }
         }
 
@@ -244,44 +245,37 @@ namespace LpSolveMilpManager.Implementation
 
         protected override void InternalLoadModelFromFile(string modelPath)
         {
-            lpsolve.delete_lp(LpSolvePointer);
-            lpsolve.Init();
+            LpSolvePointer.delete_lp();
+            LpSolve.Init();
             var IMPORTANT = 3;
             var MPS_FREE = 8;
-            if (Path.GetExtension(modelPath).Trim('.').ToLower() == "lp")
-            {
-                LpSolvePointer = lpsolve.read_LP(modelPath, IMPORTANT , null);
-            }
-            else
-            {
-                LpSolvePointer = lpsolve.read_MPS(modelPath, IMPORTANT  | MPS_FREE);
-            }
+            LpSolvePointer = Path.GetExtension(modelPath)?.Trim('.').ToLower() == "lp" ? LpSolve.read_LP(modelPath, IMPORTANT , null) : LpSolve.read_MPS(modelPath, IMPORTANT  | MPS_FREE);
         }
 
         public override void Solve()
         {
-            lpsolve.solve(LpSolvePointer);
+            LpSolvePointer.solve();
         }
 
         public override double GetValue(IVariable variable)
         {
             var row = GetRowArray();
-            lpsolve.get_variables(LpSolvePointer, row);
+            LpSolvePointer.get_variables(row);
             return row[VariableId(variable) - 1];
         }
 
         public override SolutionStatus GetStatus()
         {
-            var status = lpsolve.get_status(LpSolvePointer);
-            if (status == (int) lpsolve.lpsolve_return.OPTIMAL)
+            var status = LpSolvePointer.get_status();
+            if (status == (int)lpsolve_return.OPTIMAL)
             {
                 return SolutionStatus.Optimal;
             }
-            if (status == (int)lpsolve.lpsolve_return.UNBOUNDED)
+            if (status == (int)lpsolve_return.UNBOUNDED)
             {
                 return SolutionStatus.Unbounded;
             }
-            if (status == (int)lpsolve.lpsolve_return.INFEASIBLE)
+            if (status == (int)lpsolve_return.INFEASIBLE)
             {
                 return SolutionStatus.Infeasible;
             }
