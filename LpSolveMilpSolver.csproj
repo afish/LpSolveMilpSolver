@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Implementation\BasisSaveFileSettings.cs" />
     <Compile Include="Implementation\FreeMpsSaveFileSettings.cs" />
+    <Compile Include="Implementation\ILpSolveVariable.cs" />
     <Compile Include="Implementation\LpSaveFileSettings.cs" />
     <Compile Include="Implementation\LpSolveMilpSolverSettings.cs" />
     <Compile Include="Implementation\LpSolveMilpSolver.cs" />

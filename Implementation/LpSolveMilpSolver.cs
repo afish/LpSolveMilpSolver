@@ -62,8 +62,9 @@ namespace LpSolveMilpManager.Implementation
 
 		private int VariableId(IVariable v)
 		{
-			return ((LpSolveVariable) v).Id;
+			return ((ILpSolveVariable) v).Id;
 		}
+
 		private void AddRowConstraint(double[] row, lpsolve_constr_types type = lpsolve_constr_types.EQ, double val = 0)
 		{
 			Rows++;
