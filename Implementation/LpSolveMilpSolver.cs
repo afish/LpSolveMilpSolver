@@ -3,10 +3,11 @@ using System.IO;
 using LpSolveDotNet;
 using MilpManager.Abstraction;
 using MilpManager.Implementation;
+using MilpManager.Utilities;
 
 namespace LpSolveMilpManager.Implementation
 {
-	public class LpSolveMilpSolver : BaseMilpSolver, IModelSaver<MpsSaveFileSettings>,
+	public class LpSolveMilpSolver : PersistableMilpSolver, IModelSaver<MpsSaveFileSettings>,
 		IModelSaver<FreeMpsSaveFileSettings>, IModelSaver<LpSaveFileSettings>, IModelSaver<BasisSaveFileSettings>,
 		IModelSaver<XliSaveFileSettings>, IModelSaver<ParamsSaveFileSettings>
 	{
