@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MilpManager.Abstraction;
 
 namespace LpSolveMilpManager.Implementation
@@ -11,8 +12,8 @@ namespace LpSolveMilpManager.Implementation
 
 		public IMilpManager MilpManager
 		{
-			get { return _milpManager; }
-			set { _milpManager = value; }
+			get => _milpManager;
+		    set => _milpManager = value;
 		}
 
 		public Domain Domain { get; set; }
@@ -20,9 +21,11 @@ namespace LpSolveMilpManager.Implementation
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Expression { get; set; }
-		public override string ToString()
+	    public ICollection<string> Constraints { get; } = new List<string>();
+
+        public override string ToString()
 		{
-			return $"[Name = {Name}, Domain = {Domain}, ConstantValue = {ConstantValue}, Id = {Id}, Expressoin = {Expression}";
+			return $"[Name = {Name}, Domain = {Domain}, ConstantValue = {ConstantValue}, Id = {Id}, Expression = {Expression}";
 		}
 	}
 }
