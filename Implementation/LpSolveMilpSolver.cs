@@ -2,7 +2,6 @@
 using System.IO;
 using LpSolveDotNet;
 using MilpManager.Abstraction;
-using MilpManager.Implementation;
 using MilpManager.Utilities;
 
 namespace LpSolveMilpManager.Implementation
