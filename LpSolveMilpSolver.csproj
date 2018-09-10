@@ -82,9 +82,8 @@
       <HintPath>..\packages\LpSolveDotNet.3.0.1\lib\net20\LpSolveDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MilpManager, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MilpManager.2.1.0.0\lib\net40\MilpManager.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MilpManager, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MilpManager.3.0.0.0\lib\net40\MilpManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
